@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kalkulator BMI</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <div class="container">
+        <!-- BMI Calculator Section -->
+        <div class="calculator">
+            <h2>Kalkulator BMI</h2>
+            <p>Berat badan ideal adalah impian semua orang. Tidak hanya memiliki bentuk tubuh yang menunjang penampilan, tetapi berat badan ideal juga menandakan kondisi tubuh yang sehat. Bagaimana denganmu? Yuk, hitung sekarang di kalkulator BMI.</p>
+
+            <form id="bmiForm">
+                <label for="gender">Jenis Kelamin</label>
+                <div>
+                    <input type="radio" name="gender" value="male" id="genderMale" checked>
+                    <label for="genderMale">Pria</label>
+                    <input type="radio" name="gender" value="female" id="genderFemale">
+                    <label for="genderFemale">Wanita</label>
+                </div>
+                
+                <label for="weight">Berat Badan (kg)</label>
+                <input type="number" id="weight" placeholder="Masukkan berat badan" required min="1" step="0.1" pattern="[0-9]+(\.[0-9]{1,2})?">
+
+                <label for="age">Usia (tahun)</label>
+                <input type="number" id="age" placeholder="Masukkan usia" required min="1" max="120">
+
+                <label for="height">Tinggi Badan (cm)</label>
+                <input type="number" id="height" placeholder="Masukkan tinggi badan" required min="1" max="250" step="0.1" pattern="[0-9]+(\.[0-9]{1,2})?">
+
+                <button type="button" onclick="calculateBMI()">Hitung BMI</button>
+                <button type="reset">Reset</button>
+            </form>
+
+            <div class="features">
+                <h3>Keunggulan Fitur</h3>
+                <ul>
+                    <li>Menghitung berat badan ideal secara cepat dan mudah.</li>
+                    <li>Menentukan kategori berat badan berdasarkan standar BMI.</li>
+                    <li>Membantu mempersiapkan program penurunan atau peningkatan berat badan.</li>
+                    <li>Dapat digunakan oleh semua kalangan dengan petunjuk yang jelas.</li>
+                </ul>
+            </div>
+            
+            <div class="diagnosis">
+                <h3>Penjelasan Diagnosis</h3>
+                <p>Indeks Massa Tubuh (BMI) adalah cara untuk menentukan apakah berat badan Anda berada dalam kategori sehat. BMI dihitung berdasarkan berat badan (dalam kilogram) dibagi dengan tinggi badan (dalam meter) kuadrat. Hasil BMI dapat memberikan gambaran umum tentang kesehatan tubuh dan risiko penyakit tertentu.</p>
+                <p>Hasil BMI ini bukan pengganti diagnosis kesehatan dari tenaga medis profesional. Anda disarankan untuk berkonsultasi dengan ahli gizi atau dokter untuk mendapatkan penanganan yang tepat sesuai kondisi tubuh Anda.</p>
+            </div>
+        </div>
+
+        <!-- Result Section -->
+        <div class="result" id="resultSection" style="display: none;">
+            <div id="resultText">
+                <h3>Berat Badan Ideal</h3>
+                <p id="resultMessage">Anda memiliki berat badan berlebih</p>
+            </div>
+            <button onclick="downloadResult()">Download Hasil BMI</button>
+            <p>Hasil BMI Anda adalah <strong id="bmiResult">Hasil</strong>, yang tergolong dalam kategori <strong id="bmiCategory">Berat Badan Lebih</strong>. Jika BMI Anda berada dalam rentang ini, disarankan untuk mengatur pola makan dan rutin berolahraga untuk mencapai berat badan ideal.</p>
+            <p>Berikut adalah penjelasan lebih lanjut tentang kategori BMI:</p>
+            <ul>
+                <li><strong>BMI di bawah 18.5:</strong> Berat Badan Kurang - Anda mungkin memerlukan asupan kalori tambahan untuk mencapai berat badan ideal.</li>
+                <li><strong>BMI antara 18.5 - 24.9:</strong> Berat Badan Ideal</li>
+                <li><strong>BMI antara 25 - 29.9:</strong> Berat Badan Lebih - Anda mungkin perlu mengurangi asupan kalori dan meningkatkan aktivitas fisik untuk mencapai berat badan ideal.</li>
+                <li><strong>BMI 30 atau lebih:</strong> Berat Badan Obesitas - Anda mungkin perlu mengurangi asupan kalori secara signifikan dan meningkatkan aktivitas fisik untuk mencapai berat badan ideal.</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        function calculateBMI() {
+            var weight = document.getElementById("weight").value;
+            var height = document.getElementById("height").value / 100;
+            var bmi = weight / (height * height);
+            var category;
+
+            if (bmi < 18.5) {
+                category = "Berat Badan Kurang";
+            } else if (bmi < 25) {
+                category = "Berat Badan Ideal";
+            } else if (bmi < 30) {
+                category = "Berat Badan Lebih";
+            } else {
+                category = "Berat Badan Obesitas";
+            }
+
+            document.getElementById("bmiResult").innerHTML = bmi.toFixed(2);
+            document.getElementById("bmiCategory").innerHTML = category;
+            document.getElementById("resultSection").style.display = "block";
+        }
+
+        function downloadResult() {
+            var bmi = document.getElementById("bmiResult").innerHTML;
+            var category = document.getElementById("bmiCategory").innerHTML;
+            var result = "Hasil BMI Anda adalah " + bmi + ", yang tergolong dalam kategori " + category + ".";
+
+            var blob = new Blob([result], {type: "text/plain"});
+            var url = URL.createObjectURL(blob);
+            var a = document.createElement("a");
+            a.href = url;
+            a.download = "hasil_bmi.txt";
+            a.click();
+        }
+    </script>
+</body>
+</html>
